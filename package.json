@@ -1,0 +1,15 @@
+{
+	"name": "app",
+	"engines": {
+		"node": ">=0.10.0"
+	},
+	"scripts": {},
+	"dependencies": {
+		"@types/angular": "^1.6.32",
+		"bluebird": "^3.5.1",
+		"fs": "0.0.1-security",
+		"mkdirp": "^0.5.1",
+		"path": "^0.12.7",
+		"prompt-promise": "^1.0.3"
+	}
+}

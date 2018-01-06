@@ -3,6 +3,7 @@
 
 *CS code to add to template:*
 
+**definitions**
 usings
     content type
         definition
@@ -20,3 +21,9 @@ usings
             remove/customize fields
             add
                 allitems || alldocuments
+
+**fields**
+usings
+    fieldTypes
+    group
+    

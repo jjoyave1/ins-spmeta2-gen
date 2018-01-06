@@ -12,6 +12,8 @@ debug.log
 q
 .vscode/
 
+tpf-generator.js
+
 ## BEGIN COPY : https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 ## Ignore Visual Studio temporary files, build results, and

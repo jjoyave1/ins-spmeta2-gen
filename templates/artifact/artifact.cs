@@ -9,37 +9,35 @@ using SPMeta2.Utils;
 
 namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Artefacts
 {
-    public static class SubFunctionCT
+    public static class SampleCT
     {
         // New Content Type Definition
         public static ContentTypeDefinition ContentType()
         {
             return new ContentTypeDefinition
             {
-                // Description = "List of sub functions",
-                Group = ".EY Taxonomy",
-                Id = new Guid("2e02ffe8-0080-4264-9323-456fd48752f6"),
-                Name = "Sub Function",
+                Description = "List of sub functions",
+                Group = ".EY SampleGroup",
+                Id = "newGuid",
+                Name = "SampleCTDisplayName",
                 ParentContentTypeId = BuiltInContentTypeId.Item
             };
         }
 
-        public static WebModelNode AddSubFunctionCT(this WebModelNode node)
+        public static WebModelNode AddSampleCT(this WebModelNode node)
         {
             node
                 .AddContentType(ContentType(), currentContentType =>
                 {
                     currentContentType
-                        .AddContentTypeFieldLink(FieldsInfo.Function())
-                        .AddContentTypeFieldLink(FieldsInfo.Ordinal())
-                        .AddContentTypeFieldLink(FieldsInfo.FontAwesomeIconName())
+                        // .AddContentTypeFieldLink(FieldsInfo.Function())
                         ;
                 });
             return node;
         }
     }
 
-    public static class SubFunctionsList
+    public static class SampleListList
     {
         // New list definition 
         public static ListDefinition List()
@@ -47,10 +45,11 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
             return new ListDefinition
             {
                 ContentTypesEnabled = true,
-                CustomUrl = "Lists/Functions",
+                CustomUrl = "SampleListURL",
                 EnableVersioning = true,
+                EnableAttachments = true,
                 TemplateType = BuiltInListTemplateTypeId.GenericList,
-                Title = "Functions"
+                Title = "SampleListTitle"
             };
         }
 
@@ -61,13 +60,8 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
             {
                 Fields = new Collection<string>
                 {
-                    BuiltInInternalFieldNames.ID,
-                    BuiltInInternalFieldNames.LinkTitle,
-                    FieldsInfo.Ordinal().InternalName,
-                    FieldsInfo.FontAwesomeIconName().InternalName,
-                    FieldsInfo.MenuCategory().InternalName,
-                    BuiltInInternalFieldNames.Editor,
-                    BuiltInInternalFieldNames.Modified
+                    // BuiltInInternalFieldNames.ID,
+                    // Additional Fields
                 },
                 IsDefault = true,
                 Query = "<OrderBy>" +
@@ -114,13 +108,13 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
         }
 
         // Add new list method
-        public static WebModelNode AddSubFunctionsList(this WebModelNode node)
+        public static WebModelNode AddSampleListList(this WebModelNode node)
         {
             node
                 .AddList(List(), currentList =>
                 {
                     currentList
-                        .AddContentTypeLink(SubFunctionCT.ContentType())
+                        .AddContentTypeLink(SampleCT.ContentType())
                         .AddRemoveContentTypeLinks(new RemoveContentTypeLinksDefinition
                         {
                             ContentTypes = new List<ContentTypeLinkValue>

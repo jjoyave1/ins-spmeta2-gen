@@ -3,14 +3,17 @@ var fs = Promise.promisifyAll(require("fs"));
 var path = require("path");
 var mkdirp = require("mkdirp");
 var prompt = require("prompt-promise");
+var uuidv4 = require('uuid/v4');
 
 var templatesPath = "templates/";
-var targetPath = "output/";
+// var targetPath = "./m2-model/ey.xHub.core/SiteCollection/Webs/sell/Webs/models/Webs/divestiture/Artefacts/";
+var targetPath = "./output/";
 
 var templateList = {
-    a: "templates/artefact"
+    a: "templates/artifact"
 };
 
+var newGuid = 'new Guid("' + (uuidv4().toString()) + '")';
 var pathInput = "";
 var nameInput = "";
 var camelizedNameInput = "";
@@ -39,8 +42,7 @@ var generateFiles = function(fileContents, nameInput, pathInput, targetPath, tem
         var content = result[0]
                         .replace(new RegExp("sample", "g"), nameInput)
                         .replace(new RegExp("Sample", "g"), camelizedNameInput)
-                        .replace(new RegExp("templatePath", "g"), templatePath)
-                        .replace(new RegExp("moduleName", "g"), moduleName);
+						.replace(new RegExp("newGuid", "g"), newGuid);
 
         return writeFile(targetPath, targetFilename, content, templateOption);
     });
@@ -48,9 +50,11 @@ var generateFiles = function(fileContents, nameInput, pathInput, targetPath, tem
 };
 
 var camelized = function(str) {
-	return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
-		return index === 0 ? letter : letter.toUpperCase();
+	var camelizedStr = str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+		return letter.toUpperCase();
 	}).replace(/\s+|-/g, "");
+	console.log(camelizedStr);
+	return camelizedStr;
 }
 
 prompt("Enter template type (a for artefact, f for field): ")
@@ -58,35 +62,28 @@ prompt("Enter template type (a for artefact, f for field): ")
 	prompt.done();
 	templateOption = val;
 
+	if (templateOption === "f") {
+		return prompt("What type of field do you want to create?\n ").then(function(fieldType) {
+			// Do stuff here.
+		})
+	}
+
 	//get file content from the template
-	return getFiles(directoryDict[templateOption]).map(function(filename) {
-		return Promise.all([getContent(directoryDict[templateOption], filename), filename]);
+	return getFiles(templateList[templateOption]).map(function(filename) {
+		return Promise.all([getContent(templateList[templateOption], filename), filename]);
 	});
 })
 .then(function(results) {
 	fileContents = results;
-	return prompt("Enter name of file to be created (e.g. my-artefact): ");
+	return prompt("Enter non-plural name of file to be created  (e.g. my-artifact NOT my-artifacts): ");
 })
 .then(function(val) {
 	nameInput = val;
 	camelizedNameInput = camelized(nameInput);
+	pathInput = templateOption === "a" ? targetPath + "Definitions" : targetPath + "Fields";
+  	prompt.done();
 
-	if (!isShared(templateOption)) {
-
-		return prompt("Enter relative path (default 'output/'): ").then(function(val) {
-			pathInput = val || "output/";
-			targetPath = path.join(__dirname, pathInput + "/" + nameInput);
-			prompt.done();
-
-			return generateFiles(fileContents, nameInput, pathInput, targetPath, templateOption);
-		});
-	}
-	targetPath = path.join(__dirname, sharedDirectivesPath + nameInput);
-  prompt.done();
-
-  var sharedPathInput = sharedDirectivesPath.substring(0, sharedDirectivesPath.length - 1).replace("app/modules/", "");
-
-	return generateFiles(fileContents, nameInput, sharedPathInput, targetPath, templateOption);
+	return generateFiles(fileContents, nameInput, pathInput, targetPath, templateOption);
 })
 .then(function() {
 	console.log("Finished generating file(s)");

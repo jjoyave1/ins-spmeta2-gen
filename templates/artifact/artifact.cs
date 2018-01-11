@@ -18,7 +18,7 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
             {
                 Description = "List of sub functions",
                 Group = ".EY SampleGroup",
-                Id = "newGuid",
+                Id = newGuid,
                 Name = "SampleCTDisplayName",
                 ParentContentTypeId = BuiltInContentTypeId.Item
             };

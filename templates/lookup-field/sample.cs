@@ -10,15 +10,14 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
         {
             return new LookupFieldDefinition
             {
-                Group = ".EY Generic",
-                Id = "newGuid",
-                Description = "",
+                Group = "groupName",
+                Id = new Guid("newGuid"),
                 InternalName = "SampleField",
-                LookupField = , // Example: BuiltInInternalFieldNames.Title
-                LookupListUrl = , // Example: ListName.List().CustomUrl
+                LookupField = listLookup().LookupListUrl,
+                LookupWebUrl = listLookup().LookupWebUrl,
                 LookupWebUrl = "~site",
                 Required = false,
-                Title = "SampleFieldTitle"
+                Title = "fieldName"
             };
         }
     }

@@ -9,11 +9,11 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
         {
             return new TextFieldDefinition
             {
-                Group = ".EY Generic",
-                Id = "newGuid",
+                Group = "groupName",
+                Id = new Guid("newGuid"),
                 InternalName = "SampleField",
                 Required = false,
-                Title = "SampleFieldTitle"
+                Title = "fieldName"
             };
         }
     }

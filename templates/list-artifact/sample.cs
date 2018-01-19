@@ -9,35 +9,34 @@ using SPMeta2.Utils;
 
 namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Artefacts
 {
-    public static class SampleCT
+    public static class SampleCTCT
     {
         // New Content Type Definition
         public static ContentTypeDefinition ContentType()
         {
             return new ContentTypeDefinition
             {
-                Description = "List of sub functions",
-                Group = ".EY SampleGroup",
-                Id = newGuid,
-                Name = "SampleCTDisplayName",
+                Group = "groupName",
+                Id = new Guid("newGuid"),
+                Name = "CTName",
                 ParentContentTypeId = BuiltInContentTypeId.Item
             };
         }
 
-        public static WebModelNode AddSampleCT(this WebModelNode node)
+        public static WebModelNode AddSampleCTCT(this WebModelNode node)
         {
             node
                 .AddContentType(ContentType(), currentContentType =>
                 {
                     currentContentType
-                        // .AddContentTypeFieldLink(FieldsInfo.Function())
+						fieldLinks
                         ;
                 });
             return node;
         }
     }
 
-    public static class SampleListList
+    public static class SampleList
     {
         // New list definition 
         public static ListDefinition List()
@@ -45,11 +44,11 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
             return new ListDefinition
             {
                 ContentTypesEnabled = true,
-                CustomUrl = "SampleListURL",
+                CustomUrl = "List/SampleList",
                 EnableVersioning = true,
                 EnableAttachments = true,
                 TemplateType = BuiltInListTemplateTypeId.GenericList,
-                Title = "SampleListTitle"
+                Title = "listName"
             };
         }
 
@@ -60,8 +59,8 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
             {
                 Fields = new Collection<string>
                 {
-                    // BuiltInInternalFieldNames.ID,
-                    // Additional Fields
+                    BuiltInInternalFieldNames.ID,
+                    additionalFields
                 },
                 IsDefault = true,
                 Query = "<OrderBy>" +
@@ -70,26 +69,6 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
                 RowLimit = 100,
                 Title = "All Items",
                 Url = "AllItems.aspx"
-            };
-        }
-
-        public static ListViewDefinition OMParameters()
-        {
-            return new ListViewDefinition
-            {
-                Fields = new Collection<string>
-                {
-                    BuiltInInternalFieldNames.LinkTitle,
-                    FieldsInfo.FontAwesomeIconName().InternalName,
-                    FieldsInfo.Ordinal().InternalName
-                },
-                IsDefault = false,
-                Query = "<OrderBy>" +
-                            "<FieldRef Name='" + FieldsInfo.Ordinal().InternalName + "'/>" +
-                        "</OrderBy>",
-                RowLimit = 100,
-                Title = "OM Parameters",
-                Url = "OM Parameters.aspx"
             };
         }
 
@@ -108,13 +87,13 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
         }
 
         // Add new list method
-        public static WebModelNode AddSampleListList(this WebModelNode node)
+        public static WebModelNode AddSampleList(this WebModelNode node)
         {
             node
                 .AddList(List(), currentList =>
                 {
                     currentList
-                        .AddContentTypeLink(SampleCT.ContentType())
+                        .AddContentTypeLink(SampleCTCT.ContentType())
                         .AddRemoveContentTypeLinks(new RemoveContentTypeLinksDefinition
                         {
                             ContentTypes = new List<ContentTypeLinkValue>
@@ -123,7 +102,6 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
                                 }
                         })
                         .AddListView(AllItems())
-                        .AddListView(OMParameters())
                         ;
                 });
             return node;

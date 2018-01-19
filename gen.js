@@ -3,14 +3,18 @@ var fs = Promise.promisifyAll(require("fs"));
 var path = require("path");
 var mkdirp = require("mkdirp");
 var prompt = require("prompt-promise");
-var uuidv4 = require('uuid/v4');
+var uuidv4 = require("uuid/v4");
 
 var templatesPath = "templates/";
 // var targetPath = "./m2-model/ey.xHub.core/SiteCollection/Webs/sell/Webs/models/Webs/divestiture/Artefacts/";
 var targetPath = "./output/";
 
 var templateList = {
-    a: "templates/artifact"
+	list: "templates/list-artifact",
+	doclib: "templates/document-library-artifact",
+	choice: "templates/choice-field",
+	text: "templates/text-field",
+	lookup: "templates/lookup-field"
 };
 
 var newGuid = 'new Guid("' + (uuidv4().toString()) + '")';
@@ -57,7 +61,7 @@ var camelized = function(str) {
 	return camelizedStr;
 }
 
-prompt("Enter template type (a for artefact, f for field): ")
+prompt("Enter template type:\nlist for a new list artifact\ndoclib for a new document library artifact\nchoice for a new choice field\ntext for a new text field\nlookup for a new lookup field\n:")
 .then(function(val) {
 	prompt.done();
 	templateOption = val;
@@ -83,7 +87,7 @@ prompt("Enter template type (a for artefact, f for field): ")
 	pathInput = templateOption === "a" ? targetPath + "Definitions" : targetPath + "Fields";
   	prompt.done();
 
-	return generateFiles(fileContents, nameInput, pathInput, targetPath, templateOption);
+	return generateFiles(fileContents, camelizedNameInput, pathInput, targetPath, templateOption);
 })
 .then(function() {
 	console.log("Finished generating file(s)");

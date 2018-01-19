@@ -10,19 +10,17 @@ namespace ey.xHub.core.SiteCollection.Webs.sell.Webs.models.Webs.divestiture.Art
         {
             return new ChoiceFieldDefinition
             {
-                Group = ".EY ",
-                Id = newGuid,
+                Group = "groupName",
+                Id = new Guid("newGuid"),
                 Description = "",
                 InternalName = "SampleField",
                 Required = false,
                 Choices = new Collection<string>
                 {
-                    // Example: 
-                    //      "Choice One",
-                    //      "Choice Two"
+                    choiceList
                 },
-                DefaultValue = "Choice One",
-                Title = "SampleFieldTitle"
+                DefaultValue = "defaultChoice",
+                Title = "fieldName"
             };
         }
     }

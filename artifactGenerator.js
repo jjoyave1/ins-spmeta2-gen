@@ -3,6 +3,10 @@ var Promise = require("bluebird");
 var fs = Promise.promisifyAll(require("fs"));
 var path = require("path");
 var uuidv4 = require("uuid/v4");
+var fuzzy = require('fuzzy');
+var _ = require("lodash");
+var fieldGroups = require("./inquirer-prompts/fieldGroups.js");
+inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
 
 var templateList = {
 	list: "templates/list-artifact",
@@ -122,9 +126,17 @@ var fieldQuestions = [
         message: "Enter the new field name below\n:"
     },
     {
-        type: "input",
+        type: "autocomplete",
         name: "groupName",
-        message: "Enter the group name\n:"
+        message: "Enter the group name\n:",
+        suggestOnly: true,
+        source: searchFieldGroups,
+        pageSize: 5,
+        validate: function(val) {
+            return val
+                ? true
+                : 'Type something!';
+        }
     },
     {
         type: "input",
@@ -133,7 +145,7 @@ var fieldQuestions = [
     }
 ];
 
-lookupQuestions = [
+var lookupQuestions = [
     {
         type: "input",
         name: "list",
@@ -141,7 +153,7 @@ lookupQuestions = [
     }
 ];
 
-choiceQuestions = [
+var choiceQuestions = [
     {
         type: "input",
         name: "choices",
@@ -154,7 +166,7 @@ choiceQuestions = [
     }
 ];
 
-numQuestions = [
+var numQuestions = [
     {
         type: "input",
         name: "min",
@@ -167,6 +179,13 @@ numQuestions = [
     }
 ];
 
+var CTGroups = [
+
+]
+
+var siteFields = [
+
+]
 
 var templateType;
 var artifactType;
@@ -189,6 +208,42 @@ var maxVal;
 var fieldLinksTemplate = ".AddContentTypeFieldLink(fl.Field())\n\t\t\t\t\t\t";
 var additionalFieldsTemplate = "fl.Field().InternalName,\n\t\t\t\t\t";
 var targetPath = "./output/";
+
+function searchFieldGroups(answers, input) {
+    input = input || '';
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        var fuzzyResult = fuzzy.filter(input, fieldGroups);
+        resolve(fuzzyResult.map(function(el) {
+          return el.original;
+        }));
+      }, _.random(30, 500));
+    });
+}
+
+function searchCTGroups(answers, input) {
+    input = input || '';
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        var fuzzyResult = fuzzy.filter(input, CTGroups);
+        resolve(fuzzyResult.map(function(el) {
+          return el.original;
+        }));
+      }, _.random(30, 500));
+    });
+}
+
+function searchFields(answers, input) {
+    input = input || '';
+    return new Promise(function(resolve) {
+      setTimeout(function() {
+        var fuzzyResult = fuzzy.filter(input, siteFields);
+        resolve(fuzzyResult.map(function(el) {
+          return el.original;
+        }));
+      }, _.random(30, 500));
+    });
+}
 
 var camelized = function(str) {
 	var camelizedStr = str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
@@ -228,6 +283,16 @@ var writeFile = function(targetFilename, content) {
 
     return fs.writeFileAsync(targetFilepath, content);
 };
+
+var updateFieldGroups = function() {
+    fs.readdir("./output", function(err, files) {
+        if (err) {
+            console.log(err.message);
+            console.log(err.stack);
+        }
+        console.log(files);
+    })
+}
 
 var generateFiles = function() {
     var promises = fileContents.map(function (result) {

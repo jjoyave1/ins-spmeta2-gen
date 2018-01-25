@@ -14,7 +14,7 @@ function grabGroups(files) {
     files.forEach(function(file) {
         promises.push(fs.readFileAsync("./output/" + file, "utf8").then(function(data) {
             var findGroup = new RegExp(/Group = "(.?[A-z\s]+)"/g)
-            fieldGroups.push(findGroup.exec(data)[1])
+            fieldGroups.push("\t'" + findGroup.exec(data)[1] + "',")
         }));
     })
 
@@ -23,7 +23,11 @@ function grabGroups(files) {
 
 getFileNames().then(grabGroups)
 .then(function(result) {
-    fs.readFileAsync("./inquirer-prompts/testGroups.js", "utf8").then(function(fileContents) {
-        console.log(fileContents)
-    })
+    fieldGroups.unshift("var fieldGroups = [\n\t// startFieldGroups");
+    var newGroups = fieldGroups.join("\n") + "\n\t// endFieldGroups\n];\n\nmodule.exports = fieldGroups;";
+    // fs.readFileAsync("./inquirer-prompts/testGroups.js", "utf8").then(function(fileContents) {
+    //     var findGroup = new RegExp(/\/\/ startFieldGroups(.?[\/\\A-z\s\r\n]+)\/\/ endFieldGroups/g)
+    //     // fs.write
+    // })
+    fs.writeFileAsync("./inquirer-prompts/testGroups.js", newGroups).then(console.log("Done"));
 });

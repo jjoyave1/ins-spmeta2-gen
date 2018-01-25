@@ -1,7 +1,10 @@
 var fieldGroups = [
-    // startFieldGroups
-    // groups
-    // endFieldGroups
+	// startFieldGroups
+	'.EY Standalone Costs',
+	'.EY Test',
+	'.EY Test Group',
+	'test',
+	// endFieldGroups
 ];
 
 module.exports = fieldGroups;
